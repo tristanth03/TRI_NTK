@@ -158,4 +158,16 @@ class NTK:
 
             return K
     
-        
+
+    def spectrum(self,f,X):
+        Q=X.shape[0]*f[-1].out_features
+        P=sum(p.numel() for p in f.parameters())
+
+        if P<Q:
+            J=jac.Jac().jac_batch(f,X).detach()
+            lam=torch.linalg.eigvalsh(J.T@J)
+            zeros=lam.new_zeros(Q-P)
+            return torch.cat((lam,zeros)).sort().values
+
+        K=self.structured(f,X,X)
+        return torch.linalg.eigvalsh(K)    
