@@ -1,5 +1,5 @@
 import torch
-import jac
+from . import jac
 from time import perf_counter
 
 ### Note: the last two methods are not verified
